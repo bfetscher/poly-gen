@@ -209,4 +209,3 @@
                            5)
        [#f #f]
        [`(typeof • ,M ((list int) → (list int))) M]))))
-       
