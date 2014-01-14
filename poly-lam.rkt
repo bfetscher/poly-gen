@@ -139,9 +139,9 @@
   [(const-type
     c:: (∀ a (a → ((list a) → (list a)))))]
   [(const-type
-    c:enumFromTo (∀ a (int → (int → int))))]
-  #;[(const-type
-    c:enumFromTo' (∀ a (int → (int → int))))]
+    c:enumFromTo (∀ a (int → (int → (list int)))))]
+  [(const-type
+    c:enumFromToX (∀ a (int → (int → (list int)))))]
   [(const-type
     c:nil (∀ a (list a)))]
   [(const-type
