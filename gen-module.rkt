@@ -22,7 +22,7 @@
                 (for/list ([_ (in-range num-exps)])
                   (unp-exp (one-term)))
                 ",\n  "))))
-  
+
 (define (one-term)
   (display ".")
   (flush-output)
@@ -38,9 +38,13 @@
     (λ (in)
       (port->string in))))
 
-(command-line #:args (num-exps)
-              (call-with-output-file Output-Filename
-                (λ (out)
-                  (write-string (gen-module (string->number num-exps))
-                                out))
-                #:exists 'replace))
+(module+ main
+  
+  (command-line #:args (num-exps)
+                (call-with-output-file Output-Filename
+                  (λ (out)
+                    (void (write-string (gen-module (string->number num-exps))
+                                        out)))
+                  #:exists 'replace))
+
+  (printf "\nOutput written to: ~a\n" Output-Filename))
