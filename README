@@ -2,7 +2,7 @@ poly-gen
 ========
 
 A couple scripts to generate Haskell modules for testing GHC.
-(Based on on language in "Testing an Optimising Compiler by Generating 
+(Based on the language in "Testing an Optimising Compiler by Generating 
 Random Lambda Terms" [Palka et al, 2011].)
 
 To use, from the command line:
