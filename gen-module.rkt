@@ -1,11 +1,12 @@
 #lang racket
 
 (require racket/cmdline
+         racket/runtime-path
          redex/reduction-semantics
          "poly-lam.rkt"
          "unparse.rkt")
 
-(define Mod-Template-Name "ModSkeleton.hs")
+(define-runtime-path Mod-Template "ModSkeleton.hs")
 (define term-depth (make-parameter 5))
 (define Output-Filename "TestModule.hs")
 
@@ -34,7 +35,7 @@
     [`(typeof • ,M ((list int) → (list int))) M]))
 
 (define (mod-template-text)
-  (call-with-input-file Mod-Template-Name
+  (call-with-input-file Mod-Template
     (λ (in)
       (port->string in))))
 
