@@ -13,15 +13,15 @@ enumFromTo' a n = enumFromTo a (a + n)
 case1 c' e' l' = case l' of x':xs' -> c' x' xs'; [] -> e'
 codeList :: [[Int] -> [Int]]
 codeList = [
-  (\nN -> ((((\c -> ((\rR -> ((undefined:: [Int]))))) (\e -> (0))) True))),
-  (\gG -> (gG)),
-  (\a -> (a)),
+  id,
+  (\xX -> (xX)),
   (undefined:: ([Int] -> [Int])),
-  (\p -> ([])),
-  (undefined:: ([Int] -> [Int])),
-  (\jJ -> ((undefined:: [Int]))),
-  (\nN -> ((id nN))),
-  (\hH -> ([])),
+  (\u -> ((undefined:: [Int]))),
+  ((\rRZ -> ((\b -> (rRZ)))) (undefined:: [Int])),
+  (((id head) []) ((undefined:: (Bool -> [Int])) True)),
+  (\g -> (g)),
+  (\cC -> (cC)),
+  tail,
   id]
 main = do
   hSetBuffering stdout NoBuffering

@@ -2,3 +2,5 @@
 \#*\#
 compiled/
 .DS_Store
+termsizes.txt
+TestModule.hs

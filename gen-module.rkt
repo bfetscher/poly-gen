@@ -9,6 +9,7 @@
 (define-runtime-path Mod-Template "ModSkeleton.hs")
 (define term-depth (make-parameter 5))
 (define Output-Filename "TestModule.hs")
+(define Term-Sizes-Filename "termsizes.txt")
 
 (define (gen-module num-exps)
   (define exp-text (gen-exp-text num-exps))
@@ -17,11 +18,13 @@
                   exp-text))
 
 (define (gen-exp-text num-exps)
+  (define terms (for/list ([_ (in-range num-exps)])
+                  (one-term)))
+  (write-term-sizes terms)
   (apply string-append
          (cons "\n  "
                (add-between
-                (for/list ([_ (in-range num-exps)])
-                  (unp-exp (one-term)))
+                (map unp-exp terms)
                 ",\n  "))))
 
 (define (one-term)
@@ -38,6 +41,30 @@
   (call-with-input-file Mod-Template
     (λ (in)
       (port->string in))))
+
+(define (write-term-sizes terms)
+  (call-with-output-file Term-Sizes-Filename
+    (λ (out)
+      (void
+       (write-string 
+        (apply string-append
+               (append
+                (add-between
+                 (map number->string
+                      (map term-size terms))
+                 " ")
+                '("\n")))
+        out)))
+    #:exists 'replace))
+
+(define (term-size M)
+  (match M
+    [`(λ (,x ,σ) ,M)
+     (+ 1 (term-size M))]
+    [`(,M ,N)
+     (+ 1 (term-size M) (term-size N))]
+    [_  ;; constant, number, or variable
+     1]))
 
 (module+ main
   
