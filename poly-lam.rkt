@@ -40,7 +40,7 @@
            c:-
            c::
            c:enumFromTo
-           ;c:enumFromTo'
+           c:enumFromToX
            c:nil
            c:head
            c:tail
