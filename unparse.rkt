@@ -1,6 +1,7 @@
 #lang racket
 
-(require "poly-lam.rkt")
+(require "poly-lam.rkt"
+         racket/runtime-path)
 
 (provide (all-defined-out))
 
@@ -201,10 +202,12 @@ KEYWORDEND>>
    (string-replace str "(" "")
    ")" ""))
 
+(define-runtime-path poly-lam-path "poly-lam.rkt")
+
 (define constants
   (list->set
    (map (compose str-remove-parens unp-constant)
-    (call-with-input-file "poly-lam.rkt"
+    (call-with-input-file poly-lam-path
       (λ (in)
         (read-line in) ;; skip #lang
         (let loop ()
