@@ -115,13 +115,15 @@
 
 
 (define (keyword-check s)
-  (if (set-member? keywords s)
+  (if (or (set-member? keywords s)
+          (set-member? constants s))
       (string-append "x" s)
       s))
 
 (module+ test
   (check-equal? (keyword-check "->") "x->")
-  (check-equal? (keyword-check "case") "xcase"))
+  (check-equal? (keyword-check "case") "xcase")
+  (check-equal? (keyword-check "id") "xid"))
 
 (define keyword-string 
   #<<KEYWORDEND>>
@@ -193,6 +195,28 @@ KEYWORDEND>>
   )
 
 (define keywords (list->set (map string-trim (string-split keyword-string "\n"))))
+
+(define (str-remove-parens str)
+  (string-replace 
+   (string-replace str "(" "")
+   ")" ""))
+
+(define constants
+  (list->set
+   (map (compose str-remove-parens unp-constant)
+    (call-with-input-file "poly-lam.rkt"
+      (λ (in)
+        (read-line in) ;; skip #lang
+        (let loop ()
+          (define next (read in))
+          (match next
+            [(? eof-object?)
+             (error 'constants "didn't find constants")]
+            [`(define-language poly-stlc ,stuff ...
+                (c d ::= ,cs ...) ,other-stuff ...)
+            cs]
+            [_
+             (loop)])))))))
 
 
 
