@@ -10,7 +10,8 @@
 (define charmap (make-parameter #f))
 
 (define (unp-exp e)
-  (parameterize ([charmap (make-hasheq)])
+  (parameterize ([charmap (make-hasheq)]
+                 [seen-ids (hash)])
     (let recur ([e e])
       (match e
         [`(λ (,v ,v-type) ,e)
@@ -85,19 +86,44 @@
   (check-equal? (unp-exp '(c:undefined @ (list int))) 
                 "(undefined:: [Int])"))
 
-(define (id-check s)
-  (keyword-check
-   (list->string
-    (match (map fix-nonalpha (string->list s))
-      [(cons (? char-upper-case? c1) rest)
-       (cons (char-downcase c1)
-             (cons c1 rest))]
-      [sl sl]))))
+(define seen-ids (make-parameter (hash)))
 
+(define (id-check s)
+  (hash-ref (seen-ids) s (make-new-id s)))
+
+(define (make-new-id s)
+  (define (make)
+    (define attempt
+      (keyword-check
+       (list->string
+        (match (map fix-nonalpha (string->list s))
+          [(cons (? char-upper-case? c1) rest)
+           (cons (random-alpha)
+                 (cons c1 rest))]
+          [sl sl]))))
+    (cond
+      [(member attempt (hash-values (seen-ids)))
+       (make)]
+      [else
+       (seen-ids (hash-set (seen-ids) s attempt))
+       attempt]))
+  make)
+  
 (module+ test
-  (check-equal? (id-check "Abc") "aAbc")
+  (check-not-false (regexp-match #rx"[a-z]Abc"
+                                  (id-check "Abc")))
   (check-not-false (regexp-match #rx"[a-z]+"
-                                 (id-check "a->"))))
+                                 (id-check "a->")))
+  (check-not-equal? (unp-exp
+                    '(λ (zZ int)
+                       (λ (Z int)
+                         zZ)))
+                   "(\\zZ -> ((\\zZ -> (zZ))))")
+  (check-not-equal? (unp-exp
+                    '(λ (Z int)
+                       (λ (zZ int)
+                         zZ)))
+                   "(\\wZ -> ((\\zZ -> (zZ))))"))
 
 (define (fix-nonalpha c)
   (cond 
