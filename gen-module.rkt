@@ -11,6 +11,8 @@
 (define Output-Filename "TestModule.hs")
 (define Term-Sizes-Filename "termsizes.txt")
 
+(define mod-temp-path (make-parameter Mod-Template))
+
 (define (gen-module num-exps)
   (define exp-text (gen-exp-text num-exps))
   (string-replace (mod-template-text)
@@ -32,13 +34,16 @@
   (flush-output)
   (match (generate-term poly-stlc
                         #:satisfying
+                        ;; to change target type change
+                        ;; ((list int) → (list int)) in the following
+                        ;; expression to the appropriate type
                         (typeof • M ((list int) → (list int)))
                         (term-depth))
     [#f (one-term)]
-    [`(typeof • ,M ((list int) → (list int))) M]))
+    [`(typeof • ,M ,t) M]))
 
 (define (mod-template-text)
-  (call-with-input-file Mod-Template
+  (call-with-input-file (mod-temp-path)
     (λ (in)
       (port->string in))))
 
@@ -68,7 +73,11 @@
 
 (module+ main
   
-  (command-line #:args (num-exps)
+  (command-line 
+   #:once-each
+   [("-t" "--template") path "Module template path"
+                        (mod-temp-path path)]
+   #:args (num-exps)
                 (call-with-output-file Output-Filename
                   (λ (out)
                     (void (write-string (gen-module (string->number num-exps))
