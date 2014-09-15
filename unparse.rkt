@@ -12,28 +12,58 @@
 (define (unp-exp e)
   (parameterize ([charmap (make-hasheq)]
                  [seen-ids (hash)])
-    (let recur ([e e])
-      (match e
-        [`(λ (,v ,v-type) ,e)
-         (string-append "(\\" (recur v)
-                        " -> (" (recur e) "))")]
-        [`(,e @ ,t)
+    (with-timeout 
+     (* 10 1000)
+     (λ ()
+       (let recur ([e e])
          (match e
-           ['c:undefined
-            (string-append "(" (recur e) ":: "
-                           (unp-type t) ")")]
-           [(or 'c:enumFromTo 'c:enumFromToX)
-            (string-append "(" (recur e) 
-                           ":: Int -> Int -> [Int])")]
-           [_ (recur e)])]
-        [`(,e1 ,e2)
-         (string-append "(" (recur e1) " " (recur e2) ")")]
-        [(? constant? c)
-         (unp-constant c)]
-        [(? number? n)
-         (number->string n)]
-        [(? symbol? x)
-         (id-check (symbol->string x))]))))
+           [`(λ (,v ,v-type) ,e)
+            (string-append "(\\" (recur v)
+                           " -> (" (recur e) "))")]
+           [`(,e @ ,t)
+            (match e
+              ['c:undefined
+               (string-append "(" (recur e) ":: "
+                              (unp-type t) ")")]
+              [(or 'c:enumFromTo 'c:enumFromToX)
+               (string-append "(" (recur e) 
+                              ":: Int -> Int -> [Int])")]
+              [_ (recur e)])]
+           [`(,e1 ,e2)
+            (string-append "(" (recur e1) " " (recur e2) ")")]
+           [(? constant? c)
+            (unp-constant c)]
+           [(? number? n)
+            (number->string n)]
+           [(? symbol? x)
+            (id-check (symbol->string x))])))
+     (λ ()
+       (printf "\nStuck! on the expression:\n")
+       (pretty-display e)
+       (call-with-output-file "stuck-log"
+         (λ (out)
+           (write e out)
+           (newline out))
+         #:exists 'append)))))
+
+
+
+(define (with-timeout time thunk fail-thunk [on-exn raise])
+  (define res-chan (make-channel))
+  (define exn-chan (make-channel))
+  (define thd (thread (λ () 
+                        (with-handlers ([exn:fail? (λ (exn) (channel-put exn-chan exn))])
+                          (channel-put res-chan (thunk))))))
+  (sync
+   (handle-evt (alarm-evt (+ (current-inexact-milliseconds) time))
+               (λ (_) 
+                 (break-thread thd)
+                 (fail-thunk)))
+   (handle-evt exn-chan
+               (λ (exn) (on-exn exn)))
+   (handle-evt res-chan
+               (λ (result-of-thunk) result-of-thunk))))
+
 
 (define (unp-type t)
   (match t
@@ -91,16 +121,18 @@
 (define (id-check s)
   (hash-ref (seen-ids) s (make-new-id s)))
 
+
 (define (make-new-id s)
   (define (make)
     (define attempt
       (keyword-check
        (list->string
-        (match (map fix-nonalpha (string->list s))
-          [(cons (? char-upper-case? c1) rest)
-           (cons (random-alpha)
-                 (cons c1 rest))]
-          [sl sl]))))
+        (let ([nl (map fix-nonalpha (string->list s))])
+          (cond
+            [(or (char-upper-case? (car nl))
+                 (member (list->string nl) (hash-values (seen-ids))))
+             (cons (random-alpha) nl)]
+            [else nl])))))
     (cond
       [(member attempt (hash-values (seen-ids)))
        (make)]
@@ -108,7 +140,7 @@
        (seen-ids (hash-set (seen-ids) s attempt))
        attempt]))
   make)
-  
+
 (module+ test
   (check-not-false (regexp-match #rx"[a-z]Abc"
                                   (id-check "Abc")))
@@ -123,7 +155,7 @@
                     '(λ (Z int)
                        (λ (zZ int)
                          zZ)))
-                   "(\\wZ -> ((\\zZ -> (zZ))))"))
+                   "(\\zZ -> ((\\zZ -> (zZ))))"))
 
 (define (fix-nonalpha c)
   (cond 

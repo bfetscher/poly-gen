@@ -6,6 +6,8 @@
          "poly-lam.rkt"
          "unparse.rkt")
 
+(provide (all-defined-out))
+
 (define-runtime-path Mod-Template "ModSkeleton.hs")
 (define term-depth (make-parameter 5))
 (define Output-Filename "TestModule.hs")
@@ -37,7 +39,7 @@
                         ;; to change target type change
                         ;; ((list int) → (list int)) in the following
                         ;; expression to the appropriate type
-                        (typeof • M ((list int) → (list int)))
+                        (typeof • M (int → (int → int)))
                         (term-depth))
     [#f (one-term)]
     [`(typeof • ,M ,t) M]))
