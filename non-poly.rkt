@@ -94,26 +94,43 @@
    ----------------------
    (typeof Γ (M M_2) σ_2)])
 
-(define-judgment-form poly-stlc 
+(define-judgment-form poly-stlc
   #:mode (typeof-C I O)
-  
-  [(const-type c (∀ α γ))
-   (where σ (t-subst γ α τ))
-   ------------------------------
-   (typeof-C [c @ τ] σ)]
-  
-  [(const-type c (∀ α (∀ β γ)))
-   (where γ_1 (t-subst γ β τ_2))
-   (where σ (t-subst γ_1 α τ_1))
-   ------------------------------
-   (typeof-C [[c @ τ_1] @ τ_2] σ)]
-  
-  #;[(const-type c (∀ α (∀ β (∀ α_2 γ))))
-   (where γ_0 (t-subst γ α_2 τ_3))
-   (where γ_1 (t-subst γ_0 β τ_2))
-   (where σ (t-subst γ_1 α τ_1))
-   ------------------------------
-   (typeof-C [[[c @ τ_1] @ τ_2] @ τ_3] σ)])
+  ;; undefined
+  [(typeof-C [c:undefined @ int] int)]
+  [(typeof-C [c:undefined @ bool] bool)]
+  [(typeof-C [c:undefined @ (list int)] (list int))]
+  [(typeof-C [c:undefined @ (list bool)] (list bool))]
+  [(typeof-C [c:undefined @ (list (list bool))] (list (list bool)))]
+  [(typeof-C [c:undefined @ (list (list int))] (list (list int)))]
+  ;;nil
+  [(typeof-C [c:nil @ int] (list int))]
+  [(typeof-C [c:nil @ bool] (list bool))]
+  [(typeof-C [c:nil @ (list bool)] (list (list bool)))]
+  ;;seq
+  [(typeof-C [[c:seq @ (list int)] @ (list int)] ((list int) → ((list int) → (list int))))]
+  [(typeof-C [[c:seq @ (list int)] @ int] ((list int) → (int → int)))]
+  [(typeof-C [[c:seq @ (list int)] @ bool] ((list int) → (bool → bool)))]
+  [(typeof-C [[c:seq @ bool] @ int] (bool → (int → int)))]
+  [(typeof-C [[c:seq @ ((list int) → (list int))] @ ((list int) → (list int))] (((list int) → (list int)) → (((list int) → (list int)) → ((list int) → (list int)))))]
+  [(typeof-C [[c:seq @ int] @ (list int)] (int → ((list int) → (list int))))]
+  [(typeof-C [[c:seq @ ((list int) → (list int))] @ (list int)] (((list int) → (list int)) → ((list int) → (list int))))]
+  [(typeof-C [[c:seq @ (list int)] @ (int → (list int))] ((list int) → ((int → (list int)) → (int → (list int)))))]
+  ;;id
+  [(typeof-C [c:id @ int] (int → int))]
+  [(typeof-C [c:id @ (list int)] ((list int) → (list int)))]
+  ;; tail
+  [(typeof-C [c:tail @ int] ((list int) → (list int)))]
+  ;; :
+  [(typeof-C [c:: @ int] (int → ((list int) → (list int))))]
+  [(typeof-C [c:: @ bool] (bool → ((list bool) → (list bool))))]
+  ;; foldr
+  [(typeof-C [[c:foldr @ int] @ ((list int) → (list int))] 
+             ((int → (((list int) → (list int)) → ((list int) → (list int)))) → (((list int) → (list int)) → ((list int) → ((list int) → (list int))))))]
+  ;; map
+  [(typeof-C [[c:map @ int] @ int] ((int → int) → ((list int) → (list int))))]
+  ;; from the first counterexample, Michal's thesis (other types covered above)
+  [(typeof-C [[c:seq @ ((list int) → (list int))] @ int] (((list int) → (list int)) → (int → int)))])
 
 (define-metafunction poly-stlc
   lookup : Γ x -> σ or #f
@@ -206,7 +223,7 @@
      (match (generate-term poly-stlc
                            #:satisfying
                            (typeof • M ((list int) → (list int)))
-                           5)
+                           6)
        [#f #f]
        [`(typeof • ,M ((list int) → (list int))) M]))))
 

@@ -1,0 +1,167 @@
+undefined :: Int : 181
+undefined :: Bool : 128
+[] :: Int : 84
+undefined :: [] Int : 66
+undefined :: [] Bool : 64
+seq :: [] Int, [] Int : 61
+[] :: Bool : 56
+seq :: [] Int, Int : 50
+(:) :: Int : 50
+seq :: [] Int, Bool : 48
+seq :: Bool, Int : 43
+tail :: Int : 36
+seq :: ([] Int) -> [] Int, ([] Int) -> [] Int : 36
+id :: [] Int : 36
+(:) :: Bool : 29
+undefined :: [] ([] Bool) : 28
+seq :: Int, [] Int : 26
+foldr :: Int, ([] Int) -> [] Int : 25
+seq :: ([] Int) -> [] Int, [] Int : 24
+id :: Int : 22
+map :: Int, Int : 20
+seq :: [] Int, Int -> [] Int : 19
+undefined :: [] ([] Int) : 18
+[] :: [] Bool : 18
+undefined :: Int -> Bool : 17
+id :: Bool : 16
+foldr :: Int, Bool -> [] Int : 16
+foldr :: Bool, ([] Int) -> [] Int : 16
+filter :: Int : 16
+[] :: [] Int : 16
+seq :: Int, Bool : 15
+seq :: Bool, [] Int : 15
+seq :: Bool, Bool : 14
+head :: Int : 14
+seq :: Int, Int : 13
+id :: (([] Int) -> [] Int) -> ([] Int) -> [] Int : 13
+seq :: Bool -> [] Int, [] Int : 12
+seq :: [] Int, [] Bool : 12
+seq :: Int, [] Bool : 12
+head :: Bool : 12
+[] :: Int -> Int : 12
+seq :: Int, (([] Int) -> [] Int) -> ([] Int) -> [] Int : 11
+seq :: Int, ([] Int) -> ([] ([] Int)) -> [] Bool : 11
+undefined :: [] (Int -> Bool) : 10
+undefined :: [] (Bool -> Bool) : 10
+seq :: Int -> [] Int, [] Int : 10
+seq :: [] Int, Bool -> [] Int : 10
+foldr :: Int, Int -> [] Int : 10
+undefined :: ([] Int) -> [] Int : 9
+undefined :: Int -> [] Int : 9
+seq :: ([] Int) -> [] Int, Bool : 9
+seq :: [] Int, [] ([] Bool) : 9
+seq :: Int, Int -> Int : 9
+seq :: Int, [] ([] (Bool -> Bool)) : 9
+case1 :: Bool, ([] Int) -> [] Int : 9
+[] :: Bool -> Bool : 9
+undefined :: Int -> Int : 8
+undefined :: Bool -> ([] Int) -> [] Int : 8
+undefined :: Bool -> Int : 8
+undefined :: [] (Int -> Int -> [] Int) : 8
+undefined :: [] ([] (Bool -> Bool)) : 8
+seq :: [] ([] Int), Int : 8
+seq :: [] Int, Int -> (Bool -> [] Int) -> Bool -> [] Int : 8
+seq :: [] Int, Int -> Bool : 8
+seq :: [] Int, [] ([] Int) : 8
+seq :: Int, [] (Bool -> Bool) : 8
+seq :: Bool, [] Bool : 8
+head :: [] Bool : 8
+undefined :: [] (Int -> Int) : 7
+take :: Int : 7
+seq :: ([] Int) -> ([] ([] Int)) -> [] Bool, [] Int : 7
+seq :: ([] Int) -> [] Int, Int : 7
+seq :: Bool -> [] Int, Bool -> [] Int : 7
+seq :: Int, Int -> Bool : 7
+seq :: Int, [] ([] Bool) : 7
+map :: Bool, Int : 7
+case1 :: Int, [] Int : 7
+case1 :: Bool, Int : 7
+(++) :: Int : 7
+(!!) :: Int : 7
+undefined :: Int -> [] Bool : 6
+undefined :: Bool -> [] Int : 6
+seq :: [] ([] (Int -> Int)), Int : 6
+seq :: [] Int, [] (([] Int) -> Int) : 6
+seq :: [] Int, [] (Int -> Bool) : 6
+seq :: Bool, ([] Int) -> ([] ([] Int)) -> [] Bool : 6
+null :: [] Bool : 6
+foldr :: Bool -> Bool, ([] Int) -> [] Int : 6
+[] :: Bool -> Int : 6
+(:) :: Bool -> Bool : 6
+undefined :: ([] ([] Int)) -> [] Bool : 5
+undefined :: ([] Bool) -> Bool : 5
+undefined :: Bool -> ([] Bool) -> ([] Int) -> [] Int : 5
+undefined :: [] ([] (Int -> Bool)) : 5
+undefined :: [] ([] ([] Bool)) : 5
+tail :: Bool : 5
+seq :: ([] ([] Int)) -> [] ([] Int), Int : 5
+seq :: ([] Int) -> [] Int, Int -> ([] Int) -> [] Int : 5
+seq :: ([] Int) -> [] Int, Bool -> ([] Int) -> [] Int : 5
+seq :: ([] Int) -> [] Int, [] Bool : 5
+seq :: Int -> Bool, [] Int : 5
+seq :: Bool -> Int, ([] Int) -> [] Int : 5
+seq :: [] (Int -> Int), Int : 5
+seq :: Int, ([] Int) -> ([] ([] Int)) -> Bool -> Bool : 5
+seq :: Int, [] (Int -> Int) : 5
+null :: Bool : 5
+id :: Int -> ([] Int) -> [] Int : 5
+id :: Int -> Int : 5
+id :: Bool -> ([] Int) -> [] Int : 5
+id :: [] Bool : 5
+head :: Int -> Int -> [] Int : 5
+foldr :: Int -> Int -> Int, ([] Int) -> [] Int : 5
+foldr :: Int, Int -> Int : 5
+foldr :: Int, Int -> Bool : 5
+case1 :: Int, Bool : 5
+[] :: [] (Bool -> Bool) : 5
+[] :: [] ([] Bool) : 5
+(:) :: Int -> Int -> Int : 5
+undefined :: Bool -> ([] Bool) -> [] Int : 4
+undefined :: Bool -> Int -> Bool : 4
+undefined :: Bool -> Bool : 4
+undefined :: [] (([] Int) -> [] Int) : 4
+undefined :: [] (([] Int) -> Int) : 4
+undefined :: [] (Int -> Int -> Int) : 4
+undefined :: [] (Int -> [] Int) : 4
+seq :: ([] ([] Int)) -> Int, Bool : 4
+seq :: ([] Int) -> Int -> ([] Int) -> Int, Int -> ([] ([] Int)) -> Int : 4
+seq :: ([] Int) -> Int -> Int, ([] Int) -> [] Int : 4
+seq :: ([] Int) -> [] (Int -> [] Int), [] Int : 4
+seq :: ([] Int) -> [] ([] Int), Bool : 4
+seq :: ([] Int) -> [] Int, [] (Int -> Int) : 4
+seq :: ([] Int) -> [] Bool, Int : 4
+seq :: Int -> [] Bool, Int : 4
+seq :: Int -> Int, ([] Int) -> [] Int : 4
+seq :: Int -> Bool, Bool : 4
+seq :: Bool -> ([] (([] ([] Int)) -> [] Bool)) -> [] (Int -> Bool), Int : 4
+seq :: Bool -> Bool, ([] Int) -> [] Int : 4
+seq :: [] (([] Bool) -> [] Bool), Int : 4
+seq :: [] Int, (([] (([] Int) -> Bool -> Bool)) -> Bool -> Bool -> Bool) -> [] Int : 4
+seq :: [] Int, (Bool -> [] Int) -> Bool -> [] Int : 4
+seq :: [] Int, Int -> Bool -> [] Int : 4
+seq :: [] Int, Bool -> ([] Bool) -> [] Int : 4
+seq :: [] Int, Bool -> Int : 4
+seq :: [] Int, [] (Int -> Int) : 4
+seq :: [] Bool, [] (Bool -> Bool) : 4
+seq :: Int, ([] ([] Int)) -> [] Bool : 4
+seq :: Int, Bool -> Bool : 4
+seq :: Int, [] (([] Int) -> Bool -> Bool -> Bool) : 4
+seq :: Bool, ([] ([] ([] (Bool -> Bool)))) -> [] Bool : 4
+seq :: Bool, Bool -> ([] ([] Int)) -> [] ([] Int) : 4
+null :: Int : 4
+length :: Bool : 4
+id :: ([] Int) -> [] Int : 4
+id :: Int -> Bool : 4
+id :: [] ([] Bool) : 4
+head :: Int -> Int : 4
+head :: Int -> Bool : 4
+foldr :: Int -> Int -> [] Int, ([] Int) -> [] Int : 4
+foldr :: Int -> Int, ([] Int) -> [] Int : 4
+foldr :: Bool, Int : 4
+case1 :: [] Int, Int : 4
+[] :: Int -> Bool : 4
+(:) :: Int -> Int -> [] Int : 4
+(:) :: Int -> [] Bool : 4
+(:) :: Int -> Int : 4
+(!!) :: [] Bool : 4
+

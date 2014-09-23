@@ -4,6 +4,7 @@
          racket/runtime-path
          redex/reduction-semantics
          "poly-lam.rkt"
+         (prefix-in np: "non-poly.rkt")
          "unparse.rkt")
 
 (provide (all-defined-out))
@@ -31,18 +32,32 @@
                 (map unp-exp terms)
                 ",\n  "))))
 
+(define non-poly? (make-parameter #f))
+
+(define (attempt)
+  (if (non-poly?)
+      (generate-term np:poly-stlc
+                     #:satisfying
+                     ;; to change target type change
+                     ;; ((list int) → (list int)) in the following
+                     ;; expression to the appropriate type
+                     (np:typeof • M ((list int) → (list int)))
+                     (term-depth))
+      (generate-term poly-stlc
+                     #:satisfying
+                     ;; to change target type change
+                     ;; ((list int) → (list int)) in the following
+                     ;; expression to the appropriate type
+                     (typeof • M ((list int) → (list int)))
+                     (term-depth))))
+
 (define (one-term)
   (display ".")
   (flush-output)
-  (match (generate-term poly-stlc
-                        #:satisfying
-                        ;; to change target type change
-                        ;; ((list int) → (list int)) in the following
-                        ;; expression to the appropriate type
-                        (typeof • M (int → (int → int)))
-                        (term-depth))
+  (match (attempt)
     [#f (one-term)]
-    [`(typeof • ,M ,t) M]))
+    [`(typeof • ,M ,t) M]
+    [`(np:typeof • ,M ,t) M]))
 
 (define (mod-template-text)
   (call-with-input-file (mod-temp-path)
@@ -79,6 +94,8 @@
    #:once-each
    [("-t" "--template") path "Module template path"
                         (mod-temp-path path)]
+   [("-n" "--non-poly") "Use pre-instantiated constants"
+                         (non-poly? #t)]
    #:args (num-exps)
                 (call-with-output-file Output-Filename
                   (λ (out)
