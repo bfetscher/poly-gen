@@ -96,6 +96,8 @@
                         (mod-temp-path path)]
    [("-n" "--non-poly") "Use pre-instantiated constants"
                          (non-poly? #t)]
+   [("-d" "--depth-target") depth "Target term depth (default 9)"
+                            (term-depth (string->number depth))]
    #:args (num-exps)
                 (call-with-output-file Output-Filename
                   (λ (out)
