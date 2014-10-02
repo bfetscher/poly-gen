@@ -10,7 +10,7 @@
 (provide (all-defined-out))
 
 (define-runtime-path Mod-Template "ModSkeleton.hs")
-(define term-depth (make-parameter 5))
+(define term-depth (make-parameter 9))
 (define Output-Filename "TestModule.hs")
 (define Term-Sizes-Filename "termsizes.txt")
 
